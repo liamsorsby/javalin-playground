@@ -7,5 +7,7 @@ object ApplicationConfig {
     private val conf: Config = ConfigFactory.load().resolve()
 
     val prometheusPort = conf.getInt("app.prometheus.port")
+
     val applicationPort = conf.getInt("app.port")
+    val applicationAsyncTimout = conf.getLong("app.asyncTimeout")
 }

@@ -34,7 +34,7 @@ class ApplicationConfigurator() {
             }
             it.registerPlugin(setupDocs())
             it.defaultContentType = "application/json"
-            it.asyncRequestTimeout = 500
+            it.asyncRequestTimeout = ApplicationConfig.applicationAsyncTimout
             it.showJavalinBanner = false
             it.enableCorsForAllOrigins()
         }
