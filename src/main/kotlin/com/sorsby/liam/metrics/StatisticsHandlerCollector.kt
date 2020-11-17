@@ -100,7 +100,7 @@ class StatisticsHandlerCollector private constructor(private val statisticsHandl
         val name = "jetty_responses_total"
         return MetricFamilySamples(
                 name,
-                Type.COUNTER,
+                Type.HISTOGRAM,
                 "Number of requests with response status",
                 Arrays.asList(
                         buildStatusSample(name, "1xx", statisticsHandler.responses1xx.toDouble()),
