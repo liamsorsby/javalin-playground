@@ -20,7 +20,7 @@ import io.swagger.v3.oas.models.info.Info
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.server.handler.StatisticsHandler
 
-class ApplicationConfigurator() {
+class ApplicationConfigurator {
     fun createApp(): Javalin {
         val statisticsHandler = StatisticsHandler().also {
             initializePrometheus(it)
@@ -91,5 +91,4 @@ class ApplicationConfigurator() {
             }
         }
     }
-
 }

@@ -1,0 +1,10 @@
+formatting:
+  NoWildcardImports:
+    active: false
+    autoCorrect: false
+
+style:
+  WildcardImport:
+    active: false
+  MagicNumber:
+    active: false

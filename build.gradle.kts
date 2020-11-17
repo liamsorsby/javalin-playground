@@ -1,26 +1,23 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.owasp", "dependency-check-gradle", "3.1.2")
-    }
-}
-
 plugins {
     kotlin("jvm") version "1.4.10"
     id("io.gitlab.arturbosch.detekt").version("1.15.0-RC1")
+    id("org.owasp.dependencycheck").version("6.0.3")
 }
+
 group = "com.sorsby.liam"
 version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
+    implementation(kotlin("stdlib-jdk8", "1.4.10"))
+    implementation(kotlin("reflect", "1.4.10"))
+
     // app
     implementation("io.javalin", "javalin", "3.10.0")
 
@@ -46,18 +43,18 @@ dependencies {
     implementation("io.prometheus", "simpleclient_log4j", "0.9.0")
     implementation("com.mashape.unirest", "unirest-java", "1.4.9")
 
-
     // Testing
     testImplementation(kotlin("test-junit5"))
 
     // Detekt plugins
-    detektPlugins("io.gitlab.arturbosch.detekt", "detekt-formatting"," 1.15.0-RC1") // detekt wrapper around ktlint
+    runtimeOnly(group = "io.gitlab.arturbosch.detekt", name = "detekt-cli", version = "1.15.0-RC1")
+    detektPlugins(group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version = "1.15.0-RC1")
 }
 
 detekt {
-    toolVersion = "1.15.0-RC1"
-    config = files("config/detekt/detekt.yml")
+    input = files("src/main/kotlin")
     buildUponDefaultConfig = true
+    config = files(project.rootDir.resolve("config/detekt/detekt.yml"))
 }
 
 tasks.withType<KotlinCompile>() {
