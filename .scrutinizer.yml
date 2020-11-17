@@ -1,0 +1,5 @@
+build:
+  environment:
+    sdkman:
+      - java
+      - gradle@4.2.1
