@@ -24,6 +24,7 @@ jobs:
       with:
         java-version: $
     - name: Grant execute permission for gradlew
+      if: contains(matrix.os, 'win') == false
       run: chmod +x gradlew
     - name: Check liniting
       run: ./gradlew detekt
