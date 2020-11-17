@@ -21,9 +21,9 @@ import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.server.handler.StatisticsHandler
 
 class ApplicationConfigurator {
-    fun createApp(): Javalin {
+    fun createApp(prometheusPort: Int): Javalin {
         val statisticsHandler = StatisticsHandler().also {
-            initializePrometheus(it)
+            initializePrometheus(it, prometheusPort)
         }
 
         val app: Javalin = Javalin.create {
@@ -72,9 +72,9 @@ class ApplicationConfigurator {
         }
     }
 
-    private fun initializePrometheus(statisticsHandler: StatisticsHandler) {
+    private fun initializePrometheus(statisticsHandler: StatisticsHandler, prometheusPort: Int) {
         StatisticsHandlerCollector.initialize(statisticsHandler)
-        HTTPServer(ApplicationConfig.prometheusPort)
+        HTTPServer(prometheusPort)
         DefaultExports.initialize()
     }
 
@@ -83,7 +83,7 @@ class ApplicationConfigurator {
             path("/api/v1/hello") {
                 get(HelloController::getHello)
             }
-            path("/health") {
+            path("/alive") {
                 get(HealthController::alive)
             }
             path("/ready") {

@@ -4,6 +4,7 @@ plugins {
     kotlin("jvm") version "1.4.10"
     id("io.gitlab.arturbosch.detekt").version("1.15.0-RC1")
     id("org.owasp.dependencycheck").version("6.0.3")
+    jacoco
 }
 
 group = "com.sorsby.liam"
@@ -46,9 +47,16 @@ dependencies {
     // Testing
     testImplementation(kotlin("test-junit5"))
 
+    // Spec testing frameworks
+    testImplementation("org.spekframework.spek2", "spek-dsl-jvm", "2.0.4")
+    testRuntimeOnly("org.spekframework.spek2", "spek-runner-junit5", "2.0.4")
+    testImplementation("com.natpryce", "hamkrest", "1.6.0.0")
+    testImplementation("khttp", "khttp", "0.1.0")
+    testImplementation("io.mockk", "mockk", "1.10.0")
+
     // Detekt plugins
-    runtimeOnly(group = "io.gitlab.arturbosch.detekt", name = "detekt-cli", version = "1.15.0-RC1")
-    detektPlugins(group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version = "1.15.0-RC1")
+    runtimeOnly("io.gitlab.arturbosch.detekt", "detekt-cli", "1.15.0-RC1")
+    detektPlugins("io.gitlab.arturbosch.detekt", "detekt-formatting", "1.15.0-RC1")
 }
 
 detekt {
@@ -57,6 +65,21 @@ detekt {
     config = files(project.rootDir.resolve("config/detekt/detekt.yml"))
 }
 
+tasks.withType<Test> {
+    useJUnitPlatform {
+        includeEngines("spek2")
+    }
+    environment("APPLICATION_PORT", "8080")
+    environment("PROMETHEUS_PORT", "8081")
+}
+
 tasks.withType<KotlinCompile>() {
     kotlinOptions.jvmTarget = "13"
+}
+
+tasks.test {
+    finalizedBy(tasks.jacocoTestReport)
+}
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
 }

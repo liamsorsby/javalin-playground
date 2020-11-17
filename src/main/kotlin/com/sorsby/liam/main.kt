@@ -4,6 +4,6 @@ import com.sorsby.liam.config.ApplicationConfig
 
 fun main() {
     ApplicationConfigurator()
-        .createApp()
+        .createApp(ApplicationConfig.prometheusPort)
         .start(ApplicationConfig.applicationPort)
 }
