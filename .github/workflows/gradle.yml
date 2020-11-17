@@ -3,15 +3,11 @@
 
 name: Java CI with Gradle
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: $
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: true
       matrix:
@@ -22,7 +18,7 @@ jobs:
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
       with:
-        java-version: $
+        java-version: ${{ matrix.java_version }}
     - name: Grant execute permission for gradlew
       if: contains(matrix.os, 'win') == false
       run: chmod +x gradlew
