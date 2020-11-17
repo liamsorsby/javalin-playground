@@ -3,3 +3,14 @@ build:
     sdkman:
       - java
       - gradle@4.2.1
+  nodes:
+    deploy:
+      requires:
+        - branch: main
+    tests-with-coverage:
+      tests:
+        override:
+          - command: gradle clean test
+            coverage:
+              file: 'build/reports/jacoco/test/jacocoTestReport.xml'
+              format: 'jacoco'
